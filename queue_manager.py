@@ -24,7 +24,7 @@ def dequeue_new():
         try:
             with open(queue_file, 'r') as file:
                 queue_data = json.load(file)
-            tasks = queue_data.get('new', [])  # Fetch tasks from the 'new' key
+            tasks = queue_data.get('new', [])
             if tasks:
                 task = tasks.pop(0)
                 queue_data['new'] = tasks
@@ -40,11 +40,12 @@ def enqueue_new(task):
         try:
             with open(queue_file, 'r') as file:
                 queue_data = json.load(file)
-            tasks = queue_data.get('new', [])  # Fetch tasks from the 'new' key
+            tasks = queue_data.get('new', [])
             tasks.append(task)
             queue_data['new'] = tasks
             with open(queue_file, 'w') as file:
                 json.dump(queue_data, file)
+            logging.debug(f"Task enqueued successfully: {task}")
         except Exception as e:
             logging.error(f"Failed to enqueue task: {e}")
 
@@ -56,6 +57,7 @@ def monitor_queue():
             assign_task_to_worker(task, workers[current_worker])
             current_worker = (current_worker + 1) % len(workers)
         else:
+            logging.debug("No new tasks to assign, queue is empty.")
             time.sleep(1)  # Sleep for 1 second before checking again
 
 def assign_task_to_worker(task, worker_file):

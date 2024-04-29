@@ -16,7 +16,6 @@ def submit_task():
         task_id_entry.delete(0, tk.END)
         task_description_entry.delete(0, tk.END)
         update_status()
-        print(f"Debug: Submitted task '{task_id}': '{task_description}'. Total submitted: {submitted_count}")
     else:
         status_label.config(text="Please enter both task ID and description before submitting.")
 
@@ -27,14 +26,12 @@ def fetch_task():
     if task_id:
         completed_count += 1  # Increment the completed task count
         status_label.config(text=f"Fetched task: {task_id} with result {message}")
-        print(f"Debug: Fetched completed task '{task_id}'. Total completed: {completed_count}")
     else:
         status_label.config(text=message)
 
 def update_status():
     # Use the global counters to update the status label
     status_label.config(text=f"Tasks Submitted: {submitted_count}, Tasks Completed: {completed_count}")
-    print(f"Debug: Updated GUI. Submitted: {submitted_count}, Completed: {completed_count}")
 
 def setup_gui():
     window = tk.Tk()

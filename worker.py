@@ -17,7 +17,8 @@ lock = Lock()
 
 def process_task(task):
     character_count = len(task['description'])
-    logging.info(f"Processed task: {task['id']} - {task['description']}. Character count: {character_count}")
+    # Log only if the task processing is significant or unexpected conditions occur
+    logging.debug(f"Processed task: {task['id']} - {task['description']}. Character count: {character_count}")
     time.sleep(2)  # Simulate processing time
     return task['id'], character_count
 
@@ -49,11 +50,11 @@ def fetch_and_process_tasks():
                     file.seek(0)
                     json.dump(tasks, file)
                     file.truncate()
-                    logging.info(f"Task {task['id']} fetched for processing.")
+                    logging.debug(f"Task {task['id']} fetched for processing.")
                     task_id, character_count = process_task(task)
                     update_completed_tasks(task_id, character_count)
                 else:
-                    logging.info(f"No tasks available for Worker-{worker_id}. Waiting for new tasks.")
+                    logging.debug(f"No tasks available for Worker-{worker_id}. Waiting for new tasks.")
                     time.sleep(5)  # Sleep longer if no tasks are available
         except FileNotFoundError:
             logging.error(f"Worker file {worker_file} not found.")
